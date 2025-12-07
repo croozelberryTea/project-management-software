@@ -1,0 +1,6 @@
+@PM_API_HostAddress = http://127.0.0.1:5091
+
+GET {{PM_API_HostAddress}}/Test/
+Accept: application/json
+
+###

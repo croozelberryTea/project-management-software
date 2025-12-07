@@ -3,10 +3,7 @@ name: pm-software
 services:
   pm-api:
     container_name: pms_api
-    image: ghcr.io/immich-app/immich-server:${SOFTWARE_VERSION:-release}
-    # extends:
-    #   file: hwaccel.transcoding.yml
-    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
+    image: ghcr.io/croozelberryTea/pms-api:${SOFTWARE_VERSION:-release}
     volumes:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
@@ -31,7 +28,7 @@ services:
 
   database:
     container_name: pms_postgres
-    image: ghcr.io/postgres/postgres:18.1-bookworm@sha256:7eb4c5013812c0496c194c69026bdf2e14133e5a4450e4c70eef7bb9097cc013
+    image: postgres
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}

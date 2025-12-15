@@ -1,0 +1,1 @@
+Entities, value objects, domain events, interfaces for repositories/queries, domain‑level logic

@@ -1,0 +1,1 @@
+Orchestrates use‑cases, business rules, validation, mediates between UI and domain

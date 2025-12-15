@@ -1,0 +1,1 @@
+EF Core DbContext, concrete repository implementations, external service clients, logging, caching, migrations

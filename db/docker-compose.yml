@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pms-postgres
+      POSTGRES_DB: mydb
+    networks:
+      - lumo-net
+    ports:
+      - "5432:5432"
+
+  liquibase:
+    image: liquibase/liquibase
+    depends_on:
+      - postgres
+    volumes:
+      - ./liquibase.properties:/liquibase/liquibase.properties:ro
+      - ./db:/liquibase/db:ro
+      - ./lib:/liquibase/lib:ro
+    environment:
+      POSTGRES_PASSWORD: mySecretPassword
+    networks:
+      - lumo-net
+    command: ["--defaultsFile=/liquibase/liquibase.properties", "update"]
+
+networks:
+  lumo-net:
+    driver: bridge

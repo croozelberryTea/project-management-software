@@ -1,0 +1,20 @@
+# --------------------------------------------------------------
+# JDBC connection
+# --------------------------------------------------------------
+url=jdbc:postgresql://postgres-db:5432/mydb
+username=postgres
+password=${POSTGRES_PASSWORD}
+driver=org.postgresql.Driver
+
+# --------------------------------------------------------------
+# Where Liquibase can find the driver JAR
+# --------------------------------------------------------------
+classpath=/liquibase/lib/postgresql.jar
+
+# --------------------------------------------------------------
+# Main changelog file
+# --------------------------------------------------------------
+changeLogFile=db/changelog/master.xml
+
+# Optional: make the output a little chatty while developing
+logLevel=info

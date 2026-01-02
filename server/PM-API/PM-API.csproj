@@ -24,6 +24,7 @@
     <ItemGroup>
         <ProjectReference Include="..\PM-API.Core\PM-API.Core.csproj" />
         <ProjectReference Include="..\PM-API.Common\PM-API.Common.csproj" />
+        <ProjectReference Include="..\PM-API.Infrastructure\PM-API.Infrastructure.csproj" />
         <ProjectReference Include="..\PM-API.Service\PM-API.Service.csproj" />
     </ItemGroup>
 

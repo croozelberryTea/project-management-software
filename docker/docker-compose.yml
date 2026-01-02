@@ -16,8 +16,6 @@ services:
       - redis
       - database
     restart: always
-    healthcheck:
-      disable: false
 
   redis:
     container_name: pms_redis

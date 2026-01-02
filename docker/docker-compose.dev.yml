@@ -1,0 +1,46 @@
+name: pm-software-dev
+
+services:
+  pm-api:
+    container_name: pms_api_dev
+    build:
+      context: ../server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ../:/usr/src/app/
+    env_file:
+      - .env
+    ports:
+      - '5000:5000'
+    depends_on:
+#      - redis-cli
+      - database
+    restart: always
+#
+#  redis:
+#    container_name: pms_redis_dev
+#    image: docker.io/valkey/valkey:8@sha256:81db6d39e1bba3b3ff32bd3a1b19a6d69690f94a3954ec131277b9a26b95b3aa
+#    healthcheck:
+#      test: redis-cli ping || exit 1
+#    restart: always
+
+  database:
+    container_name: pms_postgres_dev
+    image: postgres:18.1-alpine
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+      # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
+      # DB_STORAGE_TYPE: 'HDD'
+    volumes:
+      # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
+      - ${DB_DATA_LOCATION}_dev:/var/lib/postgresql/data
+    shm_size: 128mb
+    ports:
+      - '5432:5432'
+    restart: always

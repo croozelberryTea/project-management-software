@@ -1,0 +1,27 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0
+
+WORKDIR /app
+EXPOSE 5000
+
+# Copy solution and project files from the repository root into the image
+COPY *.sln ./
+COPY PM-API/PM-API.csproj ./PM-API/
+COPY PM-API.Common/PM-API.Common.csproj ./PM-API.Common/
+COPY PM-API.Core/PM-API.Core.csproj ./PM-API.Core/
+COPY PM-API.Infrastructure/PM-API.Infrastructure.csproj ./PM-API.Infrastructure/
+COPY PM-API.Service/PM-API.Service.csproj ./PM-API.Service/
+# Add additional COPY lines for other .csproj files if you have multiple projects
+
+# Restore (runs where the solution/project files are present)
+RUN dotnet restore
+
+# Copy the server source directory (avoid using COPY . .)
+COPY PM-API/ ./PM-API/
+COPY PM-API.Common/ ./PM-API.Common/
+COPY PM-API.Core/ ./PM-API.Core/
+COPY PM-API.Infrastructure/ ./PM-API.Infrastructure/
+COPY PM-API.Service/ ./PM-API.Service/
+
+RUN dotnet build -c Debug
+
+CMD ["dotnet", "watch", "run", "--project", "PM-API/PM-API.csproj", "--urls", "http://0.0.0.0:5000"]

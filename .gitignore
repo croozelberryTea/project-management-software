@@ -56,4 +56,4 @@ nunit-*.xml
 .idea/
 .DS_Store
 
-liquibase.properties
+PM-API.sln.DotSettings.user

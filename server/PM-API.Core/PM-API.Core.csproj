@@ -10,8 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="DomainObjects\" />
-      <Folder Include="Entities\" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
     </ItemGroup>
 
 </Project>

@@ -50,6 +50,18 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         await SendEmail(message);
     }
 
+    private string GetCommonEmailStyles()
+    {
+        return @"
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; }
+        .button { display: inline-block; padding: 12px 24px; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .warning { padding: 15px; margin: 20px 0; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }";
+    }
+
     private string CreateConfirmationEmailHtml(string confirmationLink)
     {
         return $@"
@@ -58,13 +70,10 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
 <head>
     <meta charset=""utf-8"">
     <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-        .header {{ background-color: #007bff; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
-        .content {{ background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; }}
-        .button {{ display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
-        .warning {{ background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }}
-        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+        {GetCommonEmailStyles()}
+        .header {{ background-color: #007bff; }}
+        .button {{ background-color: #007bff; }}
+        .warning {{ background-color: #fff3cd; border-left: 4px solid #ffc107; }}
     </style>
 </head>
 <body>
@@ -108,13 +117,10 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
 <head>
     <meta charset=""utf-8"">
     <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-        .header {{ background-color: #dc3545; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
-        .content {{ background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; }}
-        .button {{ display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
-        .warning {{ background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; }}
-        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+        {GetCommonEmailStyles()}
+        .header {{ background-color: #dc3545; }}
+        .button {{ background-color: #dc3545; }}
+        .warning {{ background-color: #f8d7da; border-left: 4px solid #dc3545; }}
     </style>
 </head>
 <body>
@@ -161,13 +167,10 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
 <head>
     <meta charset=""utf-8"">
     <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-        .header {{ background-color: #dc3545; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
-        .content {{ background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; }}
+        {GetCommonEmailStyles()}
+        .header {{ background-color: #dc3545; }}
         .code {{ font-size: 32px; font-weight: bold; text-align: center; background-color: #eee; padding: 20px; margin: 20px 0; border-radius: 5px; letter-spacing: 5px; font-family: monospace; }}
-        .warning {{ background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; }}
-        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+        .warning {{ background-color: #f8d7da; border-left: 4px solid #dc3545; }}
     </style>
 </head>
 <body>

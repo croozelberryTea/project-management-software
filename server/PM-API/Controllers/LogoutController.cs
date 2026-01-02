@@ -6,20 +6,20 @@ namespace PM_API.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("")]
-public class AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager) : ControllerBase
+[Route("logout/")]
+public class LogoutController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager) : ControllerBase
 {
     private readonly SignInManager<IdentityUser> _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
     private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 
-    [HttpPost("logout")]
+    [HttpPost("")]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
         return Ok(new { message = "Signed out successfully" });
     }
     
-    [HttpPost("logout/everywhere")]
+    [HttpPost("everywhere")]
     public async Task<IActionResult> LogoutEverywhere()
     {
         var user = await _userManager.GetUserAsync(User);

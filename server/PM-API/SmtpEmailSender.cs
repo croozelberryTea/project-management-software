@@ -15,9 +15,9 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
     {
         var body = $"Confirmation link: {confirmationLink}";
         
-        var message = new MimeMessage();
+        using var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
-        message.To.Add(new MailboxAddress(email, email));
+        message.To.Add(MailboxAddress.Parse(email));
         message.Subject = "Email Confirmation";
         message.Body = new TextPart("plain") { Text = body };
         
@@ -28,9 +28,9 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
     {
         var body = $"Password reset link: {resetLink}";
         
-        var message = new MimeMessage();
+        using var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
-        message.To.Add(new MailboxAddress(email, email));
+        message.To.Add(MailboxAddress.Parse(email));
         message.Subject = "Password Reset";
         message.Body = new TextPart("plain") { Text = body };
         
@@ -41,9 +41,9 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
     {
         var body = $"Password reset code: {resetCode}";
         
-        var message = new MimeMessage();
+        using var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
-        message.To.Add(new MailboxAddress(email, email));
+        message.To.Add(MailboxAddress.Parse(email));
         message.Subject = "Password Reset Code";
         message.Body = new TextPart("plain") { Text = body };
         

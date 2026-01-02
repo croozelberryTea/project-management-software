@@ -3,6 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using PM_API.Configuration;
+using System.Net;
 
 namespace PM_API;
 
@@ -57,6 +58,8 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
 
     private string CreateConfirmationEmailHtml(string confirmationLink)
     {
+        var encodedLink = WebUtility.HtmlEncode(confirmationLink);
+        
         return $@"
 <!DOCTYPE html>
 <html>
@@ -72,11 +75,11 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
             <p>Thank you for registering. Please confirm your email address by clicking the button below:</p>
             
             <div style=""text-align: center;"">
-                <a href=""{confirmationLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Confirm Email Address</a>
+                <a href=""{encodedLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Confirm Email Address</a>
             </div>
             
             <p>Or copy and paste this link into your browser:</p>
-            <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{confirmationLink}</p>
+            <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{encodedLink}</p>
             
             <div style=""background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;"">
                 <strong>⚠️ Security Notice:</strong>
@@ -98,6 +101,8 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
 
     private string CreatePasswordResetEmailHtml(string resetLink)
     {
+        var encodedLink = WebUtility.HtmlEncode(resetLink);
+        
         return $@"
 <!DOCTYPE html>
 <html>
@@ -113,11 +118,11 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
             <p>You have requested to reset your password. Click the button below to proceed:</p>
             
             <div style=""text-align: center;"">
-                <a href=""{resetLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Reset Password</a>
+                <a href=""{encodedLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Reset Password</a>
             </div>
             
             <p>Or copy and paste this link into your browser:</p>
-            <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{resetLink}</p>
+            <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{encodedLink}</p>
             
             <div style=""background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0;"">
                 <strong>⚠️ Security Notice:</strong>
@@ -142,6 +147,8 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
 
     private string CreatePasswordResetCodeEmailHtml(string resetCode)
     {
+        var encodedCode = WebUtility.HtmlEncode(resetCode);
+        
         return $@"
 <!DOCTYPE html>
 <html>
@@ -156,7 +163,7 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         <div style=""background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd;"">
             <p>You have requested to reset your password. Use the code below to complete the process:</p>
             
-            <div style=""font-size: 32px; font-weight: bold; text-align: center; background-color: #eee; padding: 20px; margin: 20px 0; border-radius: 5px; letter-spacing: 5px; font-family: monospace;"">{resetCode}</div>
+            <div style=""font-size: 32px; font-weight: bold; text-align: center; background-color: #eee; padding: 20px; margin: 20px 0; border-radius: 5px; letter-spacing: 5px; font-family: monospace;"">{encodedCode}</div>
             
             <div style=""background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0;"">
                 <strong>⚠️ Security Notice:</strong>

@@ -1,6 +1,7 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Options;
+using MimeKit;
 using PM_API.Configuration;
 
 namespace PM_API;
@@ -14,14 +15,11 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
     {
         var body = $"Confirmation link: {confirmationLink}";
         
-        using var message = new MailMessage
-        {
-            From = new MailAddress(_settings.FromAddress, _settings.FromDisplayName),
-            Subject = "Email Confirmation",
-            Body = body,
-            IsBodyHtml = false
-        };
-        message.To.Add(new MailAddress(email));
+        using var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
+        message.To.Add(MailboxAddress.Parse(email));
+        message.Subject = "Email Confirmation";
+        message.Body = new TextPart("plain") { Text = body };
         
         await SendEmail(message);
     }
@@ -30,14 +28,11 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
     {
         var body = $"Password reset link: {resetLink}";
         
-        using var message = new MailMessage
-        {
-            From = new MailAddress(_settings.FromAddress, _settings.FromDisplayName),
-            Subject = "Password Reset",
-            Body = body,
-            IsBodyHtml = false
-        };
-        message.To.Add(new MailAddress(email));
+        using var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
+        message.To.Add(MailboxAddress.Parse(email));
+        message.Subject = "Password Reset";
+        message.Body = new TextPart("plain") { Text = body };
         
         await SendEmail(message);
     }
@@ -46,30 +41,39 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
     {
         var body = $"Password reset code: {resetCode}";
         
-        using var message = new MailMessage
-        {
-            From = new MailAddress(_settings.FromAddress, _settings.FromDisplayName),
-            Subject = "Password Reset Code",
-            Body = body,
-            IsBodyHtml = false
-        };
-        message.To.Add(new MailAddress(email));
+        using var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
+        message.To.Add(MailboxAddress.Parse(email));
+        message.Subject = "Password Reset Code";
+        message.Body = new TextPart("plain") { Text = body };
         
         await SendEmail(message);
     }
 
-    private async Task SendEmail(MailMessage message)
+    private async Task SendEmail(MimeMessage message)
     {
-        using var client = new SmtpClient(_settings.Host, _settings.Port)
+        using var client = new SmtpClient();
+        
+        try
         {
-            EnableSsl = _settings.EnableSsl
-        };
+            // Determine the security options based on settings
+            var secureSocketOptions = _settings.EnableSsl 
+                ? SecureSocketOptions.StartTls 
+                : SecureSocketOptions.None;
+            
+            await client.ConnectAsync(_settings.Host, _settings.Port, secureSocketOptions);
 
-        if (!string.IsNullOrEmpty(_settings.UserName))
-        {
-            client.Credentials = new NetworkCredential(_settings.UserName, _settings.Password);
+            if (!string.IsNullOrEmpty(_settings.UserName))
+            {
+                await client.AuthenticateAsync(_settings.UserName, _settings.Password);
+            }
+
+            await client.SendAsync(message);
         }
-
-        await client.SendMailAsync(message);
+        finally
+        {
+            if (client.IsConnected)
+                await client.DisconnectAsync(true);
+        }
     }
 }

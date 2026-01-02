@@ -13,8 +13,4 @@
       <Folder Include="Extensions\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
-    </ItemGroup>
-
 </Project>

@@ -43,13 +43,8 @@ app.MapIdentityApi<IdentityUser>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    Console.WriteLine("Running in development mode");
     app.MapOpenApi();
     app.MapScalarApiReference(); // adds UI at /scalar/v1
-}
-else
-{
-    Console.WriteLine("Running in production mode");
 }
 
 // app.UseHttpsRedirection();

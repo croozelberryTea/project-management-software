@@ -21,7 +21,7 @@ Now that you have confirmed that you have the .NET CLI tools properly installed 
   dotnet tool install --global dotnet-ef
 ```
 
-To verify installation of the tool you can use the input the following command
+To verify installation of the tool you can use the following command
 ```shell
   dotnet ef
 ```

@@ -63,24 +63,22 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options, ILogger<Smt
                 ? SecureSocketOptions.StartTls 
                 : SecureSocketOptions.None;
             
-            _logger.LogDebug("Connecting to SMTP server {Host}:{Port}", _settings.Host, _settings.Port);
+            _logger.LogDebug("Connecting to SMTP server");
             await client.ConnectAsync(_settings.Host, _settings.Port, secureSocketOptions);
 
             if (!string.IsNullOrEmpty(_settings.UserName))
             {
-                _logger.LogDebug("Authenticating with SMTP server as {UserName}", _settings.UserName);
+                _logger.LogDebug("Authenticating with SMTP server");
                 await client.AuthenticateAsync(_settings.UserName, _settings.Password);
             }
 
-            _logger.LogDebug("Sending email to {Recipients}", string.Join(", ", message.To));
+            _logger.LogDebug("Sending email with subject '{Subject}'", message.Subject);
             await client.SendAsync(message);
-            _logger.LogInformation("Email sent successfully to {Recipients} with subject '{Subject}'", 
-                string.Join(", ", message.To), message.Subject);
+            _logger.LogInformation("Email sent successfully with subject '{Subject}'", message.Subject);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send email to {Recipients} with subject '{Subject}'. SMTP server: {Host}:{Port}", 
-                string.Join(", ", message.To), message.Subject, _settings.Host, _settings.Port);
+            _logger.LogError(ex, "Failed to send email with subject '{Subject}'", message.Subject);
             throw;
         }
         finally

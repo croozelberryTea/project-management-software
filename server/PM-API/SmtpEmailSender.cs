@@ -16,18 +16,7 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         var htmlBody = CreateConfirmationEmailHtml(confirmationLink);
         var plainBody = CreateConfirmationEmailPlainText(confirmationLink);
         
-        using var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
-        message.To.Add(MailboxAddress.Parse(email));
-        message.Subject = "Email Confirmation";
-        
-        var multipart = new Multipart("alternative")
-        {
-            new TextPart("plain") { Text = plainBody },
-            new TextPart("html") { Text = htmlBody }
-        };
-        message.Body = multipart;
-        
+        using var message = CreateEmailMessage(email, "Email Confirmation", plainBody, htmlBody);
         await SendEmail(message);
     }
 
@@ -36,18 +25,7 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         var htmlBody = CreatePasswordResetEmailHtml(resetLink);
         var plainBody = CreatePasswordResetEmailPlainText(resetLink);
         
-        using var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
-        message.To.Add(MailboxAddress.Parse(email));
-        message.Subject = "Password Reset";
-        
-        var multipart = new Multipart("alternative")
-        {
-            new TextPart("plain") { Text = plainBody },
-            new TextPart("html") { Text = htmlBody }
-        };
-        message.Body = multipart;
-        
+        using var message = CreateEmailMessage(email, "Password Reset", plainBody, htmlBody);
         await SendEmail(message);
     }
 
@@ -56,10 +34,16 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         var htmlBody = CreatePasswordResetCodeEmailHtml(resetCode);
         var plainBody = CreatePasswordResetCodeEmailPlainText(resetCode);
         
-        using var message = new MimeMessage();
+        using var message = CreateEmailMessage(email, "Password Reset Code", plainBody, htmlBody);
+        await SendEmail(message);
+    }
+
+    private MimeMessage CreateEmailMessage(string toEmail, string subject, string plainBody, string htmlBody)
+    {
+        var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_settings.FromDisplayName, _settings.FromAddress));
-        message.To.Add(MailboxAddress.Parse(email));
-        message.Subject = "Password Reset Code";
+        message.To.Add(MailboxAddress.Parse(toEmail));
+        message.Subject = subject;
         
         var multipart = new Multipart("alternative")
         {
@@ -68,7 +52,7 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         };
         message.Body = multipart;
         
-        await SendEmail(message);
+        return message;
     }
 
     private string CreateConfirmationEmailHtml(string confirmationLink)

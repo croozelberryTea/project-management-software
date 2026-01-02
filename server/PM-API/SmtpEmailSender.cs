@@ -60,7 +60,8 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options, ILogger<Smt
 
     private string CreateConfirmationEmailHtml(string confirmationLink)
     {
-        var encodedLink = WebUtility.HtmlEncode(confirmationLink);
+        // Decode the link that Identity already HTML-encoded
+        var decodedLink = WebUtility.HtmlDecode(confirmationLink);
         
         return $@"
             <!DOCTYPE html>
@@ -77,11 +78,11 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options, ILogger<Smt
                         <p>Thank you for registering. Please confirm your email address by clicking the button below:</p>
                         
                         <div style=""text-align: center;"">
-                            <a href=""{encodedLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Confirm Email Address</a>
+                            <a href=""{decodedLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Confirm Email Address</a>
                         </div>
                         
                         <p>Or copy and paste this link into your browser:</p>
-                        <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{encodedLink}</p>
+                        <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{decodedLink}</p>
                         
                         <div style=""background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;"">
                             <strong>⚠️ Security Notice:</strong>
@@ -103,7 +104,7 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options, ILogger<Smt
 
     private string CreatePasswordResetEmailHtml(string resetLink)
     {
-        var encodedLink = WebUtility.HtmlEncode(resetLink);
+        var decodedLink = WebUtility.HtmlDecode(resetLink);
         
         return $@"
             <!DOCTYPE html>
@@ -120,11 +121,11 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options, ILogger<Smt
                         <p>You have requested to reset your password. Click the button below to proceed:</p>
                         
                         <div style=""text-align: center;"">
-                            <a href=""{encodedLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Reset Password</a>
+                            <a href=""{decodedLink}"" style=""display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;"">Reset Password</a>
                         </div>
                         
                         <p>Or copy and paste this link into your browser:</p>
-                        <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{encodedLink}</p>
+                        <p style=""word-break: break-all; background-color: #eee; padding: 10px; border-radius: 3px;"">{decodedLink}</p>
                         
                         <div style=""background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0;"">
                             <strong>⚠️ Security Notice:</strong>

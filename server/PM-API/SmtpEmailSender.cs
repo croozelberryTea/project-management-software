@@ -72,7 +72,8 @@ public class SmtpEmailSender<TUser>(IOptions<EmailSettings> options) : Microsoft
         }
         finally
         {
-            await client.DisconnectAsync(true);
+            if (client.IsConnected)
+                await client.DisconnectAsync(true);
         }
     }
 }

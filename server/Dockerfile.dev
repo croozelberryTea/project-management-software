@@ -24,4 +24,4 @@ COPY PM-API.Service/ ./PM-API.Service/
 
 RUN dotnet build -c Debug
 
-CMD ["dotnet", "watch", "run", "--project", "PM-API/PM-API.csproj", "--urls", "http://0.0.0.0:5000"]
+CMD ["dotnet", "run", "--project", "PM-API/PM-API.csproj", "--urls", "http://0.0.0.0:5000"]

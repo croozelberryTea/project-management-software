@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace PM_API.Controllers;
 
 [ApiController]
-[Route("Test")]
+[Route("[controller]")]
 public class TestController : ControllerBase
 {
     public  TestController()

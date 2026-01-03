@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PM_API.Infrastructure.ModelConfiguration;
 
 namespace PM_API.Infrastructure;
 
-public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : DbContext(options)
+public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : IdentityDbContext<IdentityUser>(options)
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -20,7 +22,17 @@ public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbCont
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new TicketConfiguration());
         base.OnModelCreating(modelBuilder);
+        modelBuilder.HasDefaultSchema("project");
+        modelBuilder.ApplyConfiguration(new TicketConfiguration());
+        
+        // Apply configuration for Identity Tables
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new UserClaimConfiguration());
+        modelBuilder.ApplyConfiguration(new UserLoginConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleClaimConfiguration());
+        modelBuilder.ApplyConfiguration(new UserTokenConfiguration());
     }
 }

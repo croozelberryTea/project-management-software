@@ -7,9 +7,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("PMDb")
-                       ?? Environment.GetEnvironmentVariable("PM_DB_CONNECTION")
-                       ?? "Host=localhost;Database=pm_db;Username=postgres;Password=postgres";
+var connectionString = GetConnectionString();
 
 Console.WriteLine($"Using connection string: {connectionString}");
 
@@ -19,13 +17,9 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp
 builder.Services.AddDbContext<ProjectManagementDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Set up authentication
-builder.Services.AddDbContext<ProjectManagementIdentityDbContext>(
-    options => options.UseNpgsql(connectionString));  // todo would it be better to use a diff connection string? diff db?
-
 // register ASP.NET Identity (stores use the identity DbContext)
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ProjectManagementIdentityDbContext>()
+    .AddEntityFrameworkStores<ProjectManagementDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddTransient(typeof(IEmailSender<>), typeof(SmtpEmailSender<>));
@@ -51,3 +45,19 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 app.UseAuthorization();
 app.Run();
+
+#region Local Functions
+
+string GetConnectionString()
+{
+    var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+    var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
+    var database = Environment.GetEnvironmentVariable("DB_DATABASE_NAME") ?? "pm_db";
+    var username = Environment.GetEnvironmentVariable("DB_USERNAME") ?? "postgres";
+    var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "postgres";
+    
+    return $"Host={host};Port={port};Database={database};Username={username};Password={password};Command Timeout=360;";
+}
+
+
+#endregion

@@ -11,6 +11,8 @@ services:
       - ../:/usr/src/app/
     env_file:
       - .env
+    environment:
+      "DB_HOST": "database"
     ports:
       - '5000:5000'
     depends_on:

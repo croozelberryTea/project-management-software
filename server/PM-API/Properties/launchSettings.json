@@ -7,12 +7,7 @@
       "launchBrowser": false,
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "Smtp__Host": "localhost",
-        "Smtp__Port": "1025",
-        "Smtp__EnableSsl": "false",
-        "Smtp__FromAddress": "projects@tycro.io",
-        "Smtp__FromDisplayName": "Project Manager"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {

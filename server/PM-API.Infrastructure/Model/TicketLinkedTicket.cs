@@ -5,7 +5,7 @@ namespace PM_API.Infrastructure.Model;
 public class TicketLinkedTicket
 {
     public long TicketLinkedTicketId { get; set; }
-    public TicketRelationshipEnum Relation { get; set; }  // This needs to serialize and deserialize as a int
+    public TicketRelationship Relation { get; set; }
     public long ParentTicketId { get; set; }
     public long ChildTicketId { get; set; }
     

@@ -19,7 +19,7 @@ public class TicketHistoryConfiguration : IEntityTypeConfiguration<TicketHistory
         builder.Property(th => th.Action)
             .HasColumnName("action")
             .IsRequired()
-            .HasMaxLength(100);
+            .HasConversion<int>();
 
         builder.Property(th => th.Details)
             .HasColumnName("details")

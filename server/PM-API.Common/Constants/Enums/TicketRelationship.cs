@@ -1,6 +1,6 @@
 ﻿namespace PM_API.Common.Constants.Enums;
 
-public enum TicketRelationshipEnum
+public enum TicketRelationship
 {
     SubTask = 1,
     RelatesTo = 2,

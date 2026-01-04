@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PM_API.Common.Constants;
 using PM_API.Infrastructure.Model;
 using PM_API.Infrastructure.ModelConfiguration;
 
@@ -14,9 +15,7 @@ public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbCont
         if (optionsBuilder.IsConfigured) return;
 
         // Prefer an environment variable, with a sensible local fallback
-        // todo set the fallback to something that makes sense or throw.
-        var connectionString = Environment.GetEnvironmentVariable("PM_DB_CONNECTION")
-                               ?? "Host=localhost;Database=pm_db;Username=postgres;Password=postgres";
+        var connectionString = ConnectionStringHelper.GetConnectionString();
 
         optionsBuilder.UseNpgsql(connectionString);
     }

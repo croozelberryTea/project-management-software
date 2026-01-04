@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PM_API.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityInMainContext : Migration
+    public partial class LinkTicketAndUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,17 +18,13 @@ namespace PM_API.Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "project");
 
-            migrationBuilder.RenameTable(
-                name: "ticket",
-                newName: "ticket",
-                newSchema: "project");
-
             migrationBuilder.CreateTable(
                 name: "role",
                 schema: "identity",
                 columns: table => new
                 {
-                    role_id = table.Column<string>(type: "text", nullable: false),
+                    role_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     concurrency_stamp = table.Column<string>(type: "text", nullable: true)
@@ -43,7 +39,8 @@ namespace PM_API.Infrastructure.Migrations
                 schema: "identity",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "text", nullable: false),
+                    user_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -71,7 +68,7 @@ namespace PM_API.Infrastructure.Migrations
                 {
                     role_claim_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    role_id = table.Column<string>(type: "text", nullable: false),
+                    role_id = table.Column<long>(type: "bigint", nullable: false),
                     claim_type = table.Column<string>(type: "text", nullable: true),
                     claim_value = table.Column<string>(type: "text", nullable: true)
                 },
@@ -88,13 +85,39 @@ namespace PM_API.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ticket",
+                schema: "project",
+                columns: table => new
+                {
+                    ticket_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    priority = table.Column<int>(type: "integer", nullable: false),
+                    created_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    last_modified_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    user_id = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ticket_pkey", x => x.ticket_id);
+                    table.ForeignKey(
+                        name: "FK_ticket_user_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "identity",
+                        principalTable: "user",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "user_claim",
                 schema: "identity",
                 columns: table => new
                 {
                     user_claim_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<string>(type: "text", nullable: false),
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
                     claim_type = table.Column<string>(type: "text", nullable: true),
                     claim_value = table.Column<string>(type: "text", nullable: true)
                 },
@@ -118,7 +141,7 @@ namespace PM_API.Infrastructure.Migrations
                     login_provider = table.Column<string>(type: "text", nullable: false),
                     provider_key = table.Column<string>(type: "text", nullable: false),
                     provider_display_name = table.Column<string>(type: "text", nullable: true),
-                    user_id = table.Column<string>(type: "text", nullable: false)
+                    user_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,8 +160,8 @@ namespace PM_API.Infrastructure.Migrations
                 schema: "identity",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "text", nullable: false),
-                    role_id = table.Column<string>(type: "text", nullable: false)
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
+                    role_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -164,7 +187,7 @@ namespace PM_API.Infrastructure.Migrations
                 schema: "identity",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "text", nullable: false),
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
                     login_provider = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     value = table.Column<string>(type: "text", nullable: true)
@@ -193,6 +216,12 @@ namespace PM_API.Infrastructure.Migrations
                 schema: "identity",
                 table: "role_claim",
                 column: "role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ticket_user_id",
+                schema: "project",
+                table: "ticket",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -234,6 +263,10 @@ namespace PM_API.Infrastructure.Migrations
                 schema: "identity");
 
             migrationBuilder.DropTable(
+                name: "ticket",
+                schema: "project");
+
+            migrationBuilder.DropTable(
                 name: "user_claim",
                 schema: "identity");
 
@@ -256,11 +289,6 @@ namespace PM_API.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "user",
                 schema: "identity");
-
-            migrationBuilder.RenameTable(
-                name: "ticket",
-                schema: "project",
-                newName: "ticket");
         }
     }
 }

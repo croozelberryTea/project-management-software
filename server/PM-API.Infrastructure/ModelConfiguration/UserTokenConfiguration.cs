@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace PM_API.Infrastructure.ModelConfiguration;
 
-public class UserTokenConfiguration : IEntityTypeConfiguration<IdentityUserToken<string>>
+public class UserTokenConfiguration : IEntityTypeConfiguration<IdentityUserToken<long>>
 {
-    public void Configure(EntityTypeBuilder<IdentityUserToken<string>> builder)
+    public void Configure(EntityTypeBuilder<IdentityUserToken<long>> builder)
     {
         builder.ToTable("user_token", "identity");
 

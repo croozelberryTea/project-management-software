@@ -5,6 +5,8 @@ using PM_API.Configuration;
 using PM_API.Infrastructure;
 using Scalar.AspNetCore;
 
+using PM_API.Infrastructure.Model;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = GetConnectionString();
@@ -18,7 +20,7 @@ builder.Services.AddDbContext<ProjectManagementDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // register ASP.NET Identity (stores use the identity DbContext)
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole<long>>()
     .AddEntityFrameworkStores<ProjectManagementDbContext>()
     .AddDefaultTokenProviders();
 
@@ -32,7 +34,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

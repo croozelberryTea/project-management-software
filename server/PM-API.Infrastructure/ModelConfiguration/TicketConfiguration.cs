@@ -36,5 +36,34 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder.Property(t => t.LastModifiedDateTime)
             .HasColumnName("last_modified_date_time")
             .IsRequired(false);
+
+        builder.Property(t => t.UserId)
+            .HasColumnName("user_id")
+            .IsRequired();
+
+        builder.HasOne(t => t.User)
+            .WithMany(u => u.Tickets)
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(t => t.Attachments)
+            .WithOne(ta => ta.Ticket)
+            .HasForeignKey(ta => ta.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(t => t.Comments)
+            .WithOne(tc => tc.Ticket)
+            .HasForeignKey(tc => tc.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(t => t.History)
+            .WithOne(th => th.Ticket)
+            .HasForeignKey(th => th.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(t => t.LinkedTickets)
+            .WithOne(tlt => tlt.ParentTicket)
+            .HasForeignKey(tlt => tlt.ParentTicketId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

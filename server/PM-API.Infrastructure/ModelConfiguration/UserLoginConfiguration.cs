@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace PM_API.Infrastructure.ModelConfiguration;
 
-public class UserLoginConfiguration : IEntityTypeConfiguration<IdentityUserLogin<string>>
+public class UserLoginConfiguration : IEntityTypeConfiguration<IdentityUserLogin<long>>
 {
-    public void Configure(EntityTypeBuilder<IdentityUserLogin<string>> builder)
+    public void Configure(EntityTypeBuilder<IdentityUserLogin<long>> builder)
     {
         builder.ToTable("user_login", "identity");
 

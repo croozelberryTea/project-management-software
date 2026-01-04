@@ -8,7 +8,7 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
 {
     public void Configure(EntityTypeBuilder<Ticket> builder)
     {
-        builder.ToTable("ticket");
+        builder.ToTable("ticket", "project");
 
         builder.HasKey(t => t.TicketId).HasName("ticket_pkey");
 

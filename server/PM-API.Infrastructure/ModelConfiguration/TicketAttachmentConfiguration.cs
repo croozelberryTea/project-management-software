@@ -8,7 +8,7 @@ public class TicketAttachmentConfiguration : IEntityTypeConfiguration<TicketAtta
 {
     public void Configure(EntityTypeBuilder<TicketAttachment> builder)
     {
-        builder.ToTable("ticket_attachment");
+        builder.ToTable("ticket_attachment", "project");
 
         builder.HasKey(ta => ta.TicketAttachmentId).HasName("ticket_attachment_pkey");
 

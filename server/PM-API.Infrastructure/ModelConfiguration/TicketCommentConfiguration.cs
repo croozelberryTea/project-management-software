@@ -8,7 +8,7 @@ public class TicketCommentConfiguration : IEntityTypeConfiguration<TicketComment
 {
     public void Configure(EntityTypeBuilder<TicketComment> builder)
     {
-        builder.ToTable("ticket_comment");
+        builder.ToTable("ticket_comment", "project");
 
         builder.HasKey(tc => tc.TicketCommentId).HasName("ticket_comment_pkey");
 

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PM_API.Common.Constants;
+using PM_API.Infrastructure.Model;
 using PM_API.Infrastructure.ModelConfiguration;
 
 namespace PM_API.Infrastructure;
 
-public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : IdentityDbContext<User, IdentityRole<long>, long>(options)
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -13,9 +15,7 @@ public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbCont
         if (optionsBuilder.IsConfigured) return;
 
         // Prefer an environment variable, with a sensible local fallback
-        // todo set the fallback to something that makes sense or throw.
-        var connectionString = Environment.GetEnvironmentVariable("PM_DB_CONNECTION")
-                               ?? "Host=localhost;Database=pm_db;Username=postgres;Password=postgres";
+        var connectionString = ConnectionStringHelper.GetConnectionString();
 
         optionsBuilder.UseNpgsql(connectionString);
     }
@@ -25,6 +25,10 @@ public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbCont
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema("project");
         modelBuilder.ApplyConfiguration(new TicketConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketAttachmentConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketCommentConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketLinkedTicketConfiguration());
         
         // Apply configuration for Identity Tables
         modelBuilder.ApplyConfiguration(new UserConfiguration());

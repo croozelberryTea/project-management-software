@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace PM_API.Infrastructure.ModelConfiguration;
 
-public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
+public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<long>>
 {
-    public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
+    public void Configure(EntityTypeBuilder<IdentityUserRole<long>> builder)
     {
         builder.ToTable("user_role", "identity");
 

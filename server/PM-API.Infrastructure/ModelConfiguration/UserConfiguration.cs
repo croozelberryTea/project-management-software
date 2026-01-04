@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PM_API.Infrastructure.Model;
 
 namespace PM_API.Infrastructure.ModelConfiguration;
 
-public class UserConfiguration : IEntityTypeConfiguration<IdentityUser>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<IdentityUser> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("user", "identity");
 

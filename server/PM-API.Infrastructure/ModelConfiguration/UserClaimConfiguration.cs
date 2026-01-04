@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace PM_API.Infrastructure.ModelConfiguration;
 
-public class UserClaimConfiguration : IEntityTypeConfiguration<IdentityUserClaim<string>>
+public class UserClaimConfiguration : IEntityTypeConfiguration<IdentityUserClaim<long>>
 {
-    public void Configure(EntityTypeBuilder<IdentityUserClaim<string>> builder)
+    public void Configure(EntityTypeBuilder<IdentityUserClaim<long>> builder)
     {
         builder.ToTable("user_claim", "identity");
 

@@ -13,6 +13,7 @@ services:
       - .env
     environment:
       "DB_HOST": "database"
+      "ASPNETCORE_ENVIRONMENT": "Development"
     ports:
       - '5000:5000'
     depends_on:

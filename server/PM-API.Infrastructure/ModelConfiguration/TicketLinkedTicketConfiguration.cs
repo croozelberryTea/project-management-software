@@ -8,7 +8,7 @@ public class TicketLinkedTicketConfiguration : IEntityTypeConfiguration<TicketLi
 {
     public void Configure(EntityTypeBuilder<TicketLinkedTicket> builder)
     {
-        builder.ToTable("ticket_linked_ticket");
+        builder.ToTable("ticket_linked_ticket", "project");
 
         builder.HasKey(tlt => tlt.TicketLinkedTicketId).HasName("ticket_linked_ticket_pkey");
 

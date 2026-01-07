@@ -9,4 +9,12 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Domain\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\PM-API.Infrastructure\PM-API.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

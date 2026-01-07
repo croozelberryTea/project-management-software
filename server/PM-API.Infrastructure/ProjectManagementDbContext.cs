@@ -9,6 +9,12 @@ namespace PM_API.Infrastructure;
 
 public class ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options) : IdentityDbContext<User, IdentityRole<long>, long>(options)
 {
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<TicketAttachment> TicketAttachments { get; set; }
+    public DbSet<TicketComment> TicketComments { get; set; }
+    public DbSet<TicketHistory> TicketHistories { get; set; }
+    public DbSet<TicketLinkedTicket> TicketLinkedTickets { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Only configure if DI didn't provide options

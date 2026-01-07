@@ -1,6 +1,6 @@
 ﻿namespace PM_API.Infrastructure.Model;
 
-public class Ticket
+public partial class Ticket
 {
     public long TicketId { get; set; }
     public string Title { get; set; } = null!;

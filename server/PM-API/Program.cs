@@ -3,10 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using PM_API;
 using PM_API.Common.Constants;
 using PM_API.Configuration;
+using PM_API.Core.Interfaces.Repositories;
+using PM_API.Core.Interfaces.Services;
 using PM_API.Infrastructure;
+using PM_API.Service.Services;
 using Scalar.AspNetCore;
 
 using PM_API.Infrastructure.Model;
+using PM_API.Middleware;
+using PM_API.Repositories.Interfaces;
+using PM_API.Service.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +36,8 @@ builder.Services.AddTransient(typeof(IEmailSender<>), typeof(SmtpEmailSender<>))
 builder.Services.AddAuthorization();
 
 // Add services to the container.
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -44,6 +52,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(); // adds UI at /scalar/v1
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 // app.UseHttpsRedirection();
 app.MapControllers();
 app.UseAuthorization();
